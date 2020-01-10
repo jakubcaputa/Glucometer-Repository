@@ -1,3 +1,8 @@
+/*
+	*Project: Glucometer
+	*Author: Patryk Okruta, Jakub Caputa
+*/
+
 #include "SPI.h"
 #include "MKL46Z4.h"
 
@@ -38,7 +43,7 @@ void spiInit(void){
 	
 	SPI0->C2 &= ~SPI_C2_SPC0_MASK;		// not bidirectional
 	
-	SPI0->C1 &= ~SPI_C1_LSBFE_MASK;		// transmission startsccc with msb
+	SPI0->C1 &= ~SPI_C1_LSBFE_MASK;		// transmission starts with msb
 	
 	SPI0->BR |= SPI_BR_SPPR(0b000);		// baud rates..
 	
@@ -48,4 +53,24 @@ void spiInit(void){
 	
 	SPI0->C1 |= SPI_C1_SSOE_MASK;		// is gpio
 	
+}
+
+void resetSET(void){
+
+	PTA->PSOR |= 1UL << RESET;
+}
+
+void resetCLR(void){
+
+	PTA->PCOR |= 1UL << RESET;
+}
+
+void dataSET(void){
+	
+	PTA->PSOR |= 1UL << DATA_CMD;
+}
+
+void cmdSET(void){
+	
+	PTA->PCOR |= 1UL << DATA_CMD;
 }
