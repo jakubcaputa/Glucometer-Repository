@@ -7,3 +7,5 @@
 .\objects\spi.o: C:\Users\user\AppData\Local\Arm\Packs\ARM\CMSIS\5.5.1\CMSIS\Core\Include\cmsis_compiler.h
 .\objects\spi.o: C:\Users\user\AppData\Local\Arm\Packs\ARM\CMSIS\5.5.1\CMSIS\Core\Include\cmsis_armcc.h
 .\objects\spi.o: C:\Users\user\AppData\Local\Arm\Packs\Keil\Kinetis_KLxx_DFP\1.3.0\Device\Include\system_MKL46Z4.h
+.\objects\spi.o: SH1106.h
+.\objects\spi.o: SPI.h

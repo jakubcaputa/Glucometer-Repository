@@ -1,11 +1,12 @@
 /*
-	*Project: Glucometer
-	*Author: Patryk Okruta, Jakub Caputa
+*File: SPI.c
+*Project: Glucometer
+*Author: Patryk Okruta, Jakub Caputa
 */
 
 #include "SPI.h"
 #include "MKL46Z4.h"
-
+#include "SH1106.h"
 
 void spiInit(void){
 	
@@ -13,23 +14,23 @@ void spiInit(void){
 	
 	SIM->SCGC5 |= SIM_SCGC5_PORTA_MASK;		// enable clock to portA
 	
-	PORTA->PCR[6] |= PORT_PCR_MUX(1);		// pin6 in portA is gpio - used as Data/Command signal
+	DC_MUX;									// pin6 in portA is gpio - used as Data/Command signal
 	
-	PORTA->PCR[7] |= PORT_PCR_MUX(1);		// pin7 in portA is gpio - used as Reset signal
+	RST_MUX;								// pin7 in portA is gpio - used as Reset signal
 	
-	PORTA->PCR[16] |= PORT_PCR_MUX(2);		// pin16 in portA is SPI0 MOSI
+	MOSI_MUX;								// pin16 in portA is SPI0 MOSI
 	
-	PORTA->PCR[15] |= PORT_PCR_MUX(2);		// pin15 in portA is SPI0 SCLK
+	SCLK_MUX;								// pin15 in portA is SPI0 SCLK
 	
-	PORTA->PCR[14] |= PORT_PCR_MUX(1);		// pin14 in portA is SS
+	CS_MUX;									// pin14 in portA is CS
 	
-	PTA->PDDR |= 1UL << DATA_CMD;			// direction - output
+	DC_DDDR;								// direction - output
 	
-	PTA->PDDR |= 1UL << RESET;				// direction - output
+	RST_DDDR;								// direction - output
 	
-	PTA->PDDR |= 1UL << SLAVE;
+	CS_DDDR;
 	
-	PTA->PCOR |= 1UL << SLAVE;
+	CS_LO;
 
 	SPI0->C1 |= SPI_C1_SPE_MASK;		// SPI System Enable
 	
@@ -47,7 +48,7 @@ void spiInit(void){
 	
 	SPI0->BR |= SPI_BR_SPPR(0b000);		// baud rates..
 	
-	SPI0->BR |= SPI_BR_SPR(0b0110);		// ...
+	SPI0->BR |= SPI_BR_SPR(0b110);		// ...
 	
 	SPI0->C2 &= ~SPI_C2_MODFEN_MASK;		// slave select
 	
@@ -55,22 +56,3 @@ void spiInit(void){
 	
 }
 
-void resetSET(void){
-
-	PTA->PSOR |= 1UL << RESET;
-}
-
-void resetCLR(void){
-
-	PTA->PCOR |= 1UL << RESET;
-}
-
-void dataSET(void){
-	
-	PTA->PSOR |= 1UL << DATA_CMD;
-}
-
-void cmdSET(void){
-	
-	PTA->PCOR |= 1UL << DATA_CMD;
-}
